@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-br" >
+  <head>
+    <base href="http://localhost/rpg/site/">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>Humans & Orcs</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="assets/css/starter-template.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+     <script src="//code.angularjs.org/snapshot/angular.min.js"></script>
+    
+
+  </head>
+
+  <body ng-app="partida">
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+      <ul class="navbar-nav mr-4">
+          <li class="nav-item active">
+            <a class="nav-link" href="">Home <span class="sr-only">(current)</span></a>
+          </li>
+      </ul>
+      </div>
+    </nav>
+
+    <div role="main" class="container" ng-controller="partidaController as controller">
+		<div class="starter-template">
+			<h1>Partidas 
+        <button ng-class="controller.btnStartMatch.customClass" ng-click="controller.btnStartMatch.click()">
+          {{controller.btnStartMatch.label}}   
+        </button>
+      </h1>
+		</div>
+
+      <div class="row mt-5" ng-show="!controller.isPlaying()">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Terrain</th>
+                <th>Climate</th>
+                <th>Appearances</th>
+                <th></th>
+              </tr>
+            </thead>
+          <tbody>
+            <tr ng-repeat="result in controller.getResults()">
+              <td >{{result._id}}</td>
+              <td >{{result.name}}</td>
+              <td>{{result.terrain}}</td>
+              <td>{{result.climate}}</td>
+              <td>{{result.movies}}</td>
+              <td><i title="Erase this planet" class="fas fa-times red-text" data-toggle="modal" data-target="#confirm-submit" ng-click="controller.confirm(result._id)"></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="row mt-5" ng-hide="!controller.isPlaying()">
+        <div class="col-md-4">
+          Humano
+        </div>
+        <div class="col-md-4">
+          
+        </div>
+        <div class="col-md-4">
+          ORC
+        </div>
+      </div>
+    </div>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    
+
+    <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="assets/js/vendor/popper.min.js"></script>
+    <script src="dist/js/bootstrap.min.js"></script>
+    <script src="assets/js/script.js" type="text/javascript"></script>
+    <!-- module -->
+    <script src="app/app.js"></script>
+    <!-- Controllers -->
+    <script src="app/controllers/partidaController.js" type="text/javascript"></script>
+    <script src="app/factory/partidaFactory.js" type="text/javascript"></script>
+  </body>
+</html>
