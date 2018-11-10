@@ -25,7 +25,7 @@ class CreateJogadoresTable extends Migration
         });
 
         // Insert some stuff
-        DB::table('jogadores')->insert(
+        DB::table('jogadores')->insert([
            [    'id_arma' => 1,
                 'forca' => 1,
                 'agilidade' => 2,
@@ -38,7 +38,7 @@ class CreateJogadoresTable extends Migration
                 'vida' => 20,
                 'raca' => 'Orc'
            ]
-        );
+        ]);
     }
 
     /**

@@ -13,6 +13,11 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:api');
+// Route::get('/user', function (Request $request) {
+//     return $request->user();
+// })->middleware('auth:api');
+
+ Route::resource('turnos', 'TurnoController');
+ Route::resource('partidas', 'PartidaController');
+ Route::resource('armas', 'ArmaController');
+ Route::resource('jogadores', 'JogadorController');

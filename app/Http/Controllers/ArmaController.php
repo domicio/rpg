@@ -3,19 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Turnos;
+use App\Armas;
 
-class TurnoController extends Controller
+class ArmaController extends Controller
 {
-    /**
+        /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $turnos = Turnos::all();
-        return response()->json($turnos);
+    public function index(){
+        $armas = Armas::all();
+        return response()->json($armas);
     }
 
     /**
@@ -25,7 +24,7 @@ class TurnoController extends Controller
      */
     public function create()
     {
-        return view('Turnos.create', compact('salas', 'professores', 'user'));
+        // return view('Armas.create', compact('salas', 'professores', 'user'));
     }
 
     /**
@@ -34,11 +33,10 @@ class TurnoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreTurnos $request)
-    {
-       $turno = $request->all();
-       Turnos::create($turno);
-       return response()->json($turno, 201);
+    public function store(StoreArmas $request){
+       $arma = $request->all();
+       Armas::create($arma);
+       return response()->json($arma, 201);
     }
 
     /**
@@ -47,10 +45,9 @@ class TurnoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        $turno=Turnos::find($id);
-        return response()->json($turno);
+    public function show($id){
+        $arma=Armas::find($id);
+        return response()->json($arma);
     }
 
     /**
@@ -59,10 +56,9 @@ class TurnoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        $turno          = Turnos::find($id);
-        return response()->json($turno);
+    public function edit($id){
+        $arma          = Armas::find($id);
+        return response()->json($arma);
     }
 
     /**
@@ -72,12 +68,11 @@ class TurnoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreTurnos $request, $id)
-    {
-       $turnoUpdate   = $request->all();
-       $turno         = Turnos::find($id);
-       $turno->update($turnoUpdate);
-       return response()->json($turno);
+    public function update(StoreArmas $request, $id){
+       $armaUpdate   = $request->all();
+       $arma         = Armas::find($id);
+       $arma->update($armaUpdate);
+       return response()->json($arma);
     }
 
     /**
@@ -86,10 +81,8 @@ class TurnoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        Turnos::find($id)->delete();
-
+    public function destroy($id){
+        Armas::find($id)->delete();
         return response()->json(['message' =>'Registro deletado'], 200);
     }
 }

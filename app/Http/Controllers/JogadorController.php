@@ -3,19 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Turnos;
+use App\Jogadores;
 
-class TurnoController extends Controller
+class JogadorController extends Controller
 {
-    /**
+     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $turnos = Turnos::all();
-        return response()->json($turnos);
+        $jogadores = Jogadores::all();
+        return response()->json($jogadores);
     }
 
     /**
@@ -25,7 +25,7 @@ class TurnoController extends Controller
      */
     public function create()
     {
-        return view('Turnos.create', compact('salas', 'professores', 'user'));
+        // return view('Jogadores.create', compact('salas', 'professores', 'user'));
     }
 
     /**
@@ -34,11 +34,11 @@ class TurnoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreTurnos $request)
+    public function store(StoreJogadores $request)
     {
-       $turno = $request->all();
-       Turnos::create($turno);
-       return response()->json($turno, 201);
+       $jogador = $request->all();
+       Jogadores::create($jogador);
+       return response()->json($jogador, 201);
     }
 
     /**
@@ -49,8 +49,8 @@ class TurnoController extends Controller
      */
     public function show($id)
     {
-        $turno=Turnos::find($id);
-        return response()->json($turno);
+        $jogador=Jogadores::find($id);
+        return response()->json($jogador);
     }
 
     /**
@@ -61,8 +61,8 @@ class TurnoController extends Controller
      */
     public function edit($id)
     {
-        $turno          = Turnos::find($id);
-        return response()->json($turno);
+        $jogador          = Jogadores::find($id);
+        return response()->json($jogador);
     }
 
     /**
@@ -72,12 +72,12 @@ class TurnoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreTurnos $request, $id)
+    public function update(StoreJogadores $request, $id)
     {
-       $turnoUpdate   = $request->all();
-       $turno         = Turnos::find($id);
-       $turno->update($turnoUpdate);
-       return response()->json($turno);
+       $jogadorUpdate   = $request->all();
+       $jogador         = Jogadores::find($id);
+       $jogador->update($jogadorUpdate);
+       return response()->json($jogador);
     }
 
     /**
@@ -88,7 +88,7 @@ class TurnoController extends Controller
      */
     public function destroy($id)
     {
-        Turnos::find($id)->delete();
+        Jogadores::find($id)->delete();
 
         return response()->json(['message' =>'Registro deletado'], 200);
     }

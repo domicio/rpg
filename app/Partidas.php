@@ -7,4 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class Partidas extends Model
 {
     //
+    protected $table 	= "partidas";
 }

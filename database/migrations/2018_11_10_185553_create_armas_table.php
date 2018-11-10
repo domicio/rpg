@@ -22,7 +22,7 @@ class CreateArmasTable extends Migration
             $table->timestamps();
         });
 
-        DB::table('armas')->insert(
+        DB::table('armas')->insert([
             [   'nome' => 'Espada Longa',
                 'ataque' => 2,
                 'defesa' => 1,
@@ -33,7 +33,7 @@ class CreateArmasTable extends Migration
                 'defesa' => 0,
                 'dado' => 8,
             ]
-        );
+        ]);
     }
 
     /**
