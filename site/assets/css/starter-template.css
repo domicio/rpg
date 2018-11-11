@@ -5,3 +5,17 @@ body {
   padding: 3rem 1.5rem;
   text-align: center;
 }
+
+img.dead {
+   -webkit-filter: grayscale(150%);
+   -moz-filter: grayscale(150%);
+   filter: grayscale(150%);
+   transition: all 1.5s ease;
+   -webkit-animation:spin 1s linear;
+    -moz-animation:spin 1s linear;
+    animation:spin 1s linear;
+ }
+
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }

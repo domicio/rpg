@@ -19,6 +19,8 @@ class CreateTurnosTable extends Migration
             $table->foreign('jogador')->references('id')->on('jogadores');
             $table->integer('dado');
             $table->integer('acao');
+            $table->integer('id_partida')->unsigned();
+            $table->foreign('id_partida')->references('id')->on('partidas');
             $table->timestamps();
         });
     }

@@ -4,10 +4,10 @@ function(factory){
 	
 	// this.playing			= factory.playing;
 	this.btnStartMatch 		= factory.btnStartMatch;
-	// this.getResults			= factory.getResults;	
-	// this.players			= factory.players;
-	// this.getResults			= factory.getResults;
-	// this.getPlayers			= factory.getPlayers;
-	// this.isPlaying			= factory.isPlaying;
-	// this.rollDices			= factory.rollDices;
+	this.isPlaying			= factory.isPlaying;
+	this.players			= factory.players;
+	this.getPlayers			= factory.getPlayers;
+	this.dado				= factory.dado;
+	this.getDices			= factory.getDices;
+	this.getResults			= factory.getResults;	
 }]);

@@ -51,20 +51,15 @@
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Name</th>
-                <th>Terrain</th>
-                <th>Climate</th>
-                <th>Appearances</th>
-                <th></th>
+                <th>Criada em</th>
+                <th>Atualizada em</th>
               </tr>
             </thead>
           <tbody>
-            <tr ng-repeat="result in controller.getResults()">
-              <td >{{result._id}}</td>
-              <td >{{result.name}}</td>
-              <td>{{result.terrain}}</td>
-              <td>{{result.climate}}</td>
-              <td>{{result.movies}}</td>
+            <tr ng-repeat="match in controller.getMatches()">
+              <td >{{match.id}}</td>
+              <td>{{match.created_at}}</td>
+              <td>{{match.updated_at}}</td>
               <td><i title="Erase this planet" class="fas fa-times red-text" data-toggle="modal" data-target="#confirm-submit" ng-click="controller.confirm(result._id)"></i>
               </td>
             </tr>
@@ -72,14 +67,57 @@
         </table>
       </div>
       <div class="row mt-5" ng-hide="!controller.isPlaying()">
-        <div class="col-md-4">
-          Humano
+        <div class="col-md-1">
+          <p><strong>Raça</strong>: {{controller.getPlayers()[0].raca}}</p>
+          <p><strong>Força</strong>: {{controller.getPlayers()[0].forca}}</p>
+          <p><strong>Agilidade</strong>: {{controller.getPlayers()[0].agilidade}}</p>
+          <p><strong>Vida</strong>: {{controller.getPlayers()[0].vida}}</p>
+          <p><strong>Arma</strong>: {{controller.getPlayers()[0].arma.nome}}</p>
+        </div>
+        <div class="col-md-3">
+          {{controller.getPlayers()[0].vida}}
+          <img class="{{controller.getPlayers()[0].vida == 0 ? 'dead' : '' }}" src="{{controller.getPlayers()[0].url}}">
         </div>
         <div class="col-md-4">
-          
+          <div class="row text-center">
+            <div class="col-md-1 text-center">
+              <h2>{{controller.getDices().humano}}</h2>
+            </div>
+            <div class="col-md-10">
+              <img class="img-responsive " src="{{controller.dado.url}}" title="{{controller.dado.title}}" ng-click="controller.dado.click()">
+            </div>
+            <div class="col-md-1">
+              <h2>{{controller.getDices().orc}}</h2>
+            </div>
+          </div>
+          <div class="row pre-scrollable">
+            <table class="table" ng-hide="controller.getResults().length == 0">
+              <thead>
+                <tr>
+                  <td>
+                    <h3 class="text-center">Acontecimentos</h3>
+                  </td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="result in controller.getResults()">
+                  <td>
+                    {{result}}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-        <div class="col-md-4">
-          ORC
+        <div class="col-md-3">
+          <img class="{{controller.getPlayers()[1].vida == 0 ? 'dead' : '' }}" src="{{controller.getPlayers()[1].url}}">
+        </div>
+        <div class="col-md-1">
+          <p><strong>Raça</strong>: {{controller.getPlayers()[1].raca}}</p>
+          <p><strong>Força</strong>: {{controller.getPlayers()[1].forca}}</p>
+          <p><strong>Agilidade</strong>: {{controller.getPlayers()[1].agilidade}}</p>
+          <p><strong>Vida</strong>: {{controller.getPlayers()[1].vida}}</p>
+          <p><strong>Arma</strong>: {{controller.getPlayers()[1].arma.nome}}</p>
         </div>
       </div>
     </div>
