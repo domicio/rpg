@@ -44,7 +44,6 @@ angular.module('partida').factory('partidaFactory', [
 				url   : factory.service_url + 'jogadores',
 			})
 			.then(function (response) {
-				console.log('response', response);
 				if(response.data.length != 0){
 					factory.players = response.data;
 					if(factory.players[0].raca == 'Humano'){
@@ -134,68 +133,47 @@ angular.module('partida').factory('partidaFactory', [
 			var atacante 				= '';
 			var defensor 				= '';
 			var dano 					= 0;
+			var attackOrDefenseVal		= false;
 			var _data					= {};
+			
 			_data.id_partida			= factory.idPartida;
 
 			if(factory.dadoGirado.humano == factory.dadoGirado.orc) rollDices();
 			
 			atacante = factory.dadoGirado.humano > factory.dadoGirado.orc ? factory.players[0] : factory.players[1];
 			defensor = factory.dadoGirado.humano > factory.dadoGirado.orc ? factory.players[1] : factory.players[0];
-			
-			if(attackOrDefense(factory.dadoGirado.humano, factory.dadoGirado.orc)){
-				dano 		= calculateDamage();
-				_data.acao 		= atacante.raca +" deferiu " +dano +" de dano" ;
-				_data.dado 		= atacante.raca == 'Humano' ?  factory.dadoGirado.humano : factory.dadoGirado.orc ;
-				_data.jogador 	= atacante.id
-				storeActionDone(_data);
-				factory.results.unshift(angular.copy(_data.acao));
+			attackOrDefenseVal = attackOrDefense(atacante, defensor);
+			if(attackOrDefenseVal) dano = calculateDamage(atacante, defensor);
 
-				_data.acao 		= defensor.raca+" sofreu "+dano + " de dano";
-				_data.dado 		= defensor.raca == 'Humano' ? factory.dadoGirado.humano : factory.dadoGirado.orc ;
-				_data.jogador 	= defensor.id
-				storeActionDone(_data);
-				factory.results.unshift(angular.copy(_data.acao));
-			}else{
-				_data.acao = defensor.raca+' defendeu o ataque do '+atacante;
-				_data.dado = factory.dadoGirado.orc;
-				_data.jogador 	= defensor.id
-				storeActionDone(_data);
-				factory.results.unshift(angular.copy(_data.acao));
+			_data.acao 		= attackOrDefenseVal ? atacante.raca +" deferiu " +dano +" de dano" : atacante.raca+" não deferiu dano do "+defensor.raca;
+			_data.dado 		= factory.dadoGirado[atacante.raca.toLowerCase()];
+			_data.jogador 	= atacante.id
+			storeActionDone(_data);
+			factory.results.unshift(angular.copy(_data.acao));
 
-				_data.acao 		= atacante.raca+" não deferiu dano do "+defensor;
-				_data.dado 		= factory.dadoGirado.humano;
-				_data.jogador 	= atacante.id
-				storeActionDone(_data);
-				factory.results.unshift(angular.copy(_data.acao));
-			}
+			_data.acao 		= attackOrDefenseVal ? defensor.raca+" sofreu "+dano + " de dano" : defensor.raca+' defendeu o ataque do '+atacante.raca;
+			_data.dado 		= factory.dadoGirado[defensor.raca.toLowerCase()];
+			_data.jogador 	= defensor.id
+			storeActionDone(_data);
+			factory.results.unshift(angular.copy(_data.acao));
 		}
 
-		function attackOrDefense(dadoHumano, dadoOrc){
-			var humanSkills = (dadoHumano/20) + factory.players[0].agilidade;
-			var orcSkills 	= (dadoOrc/20) + factory.players[1].agilidade;
-			if(dadoHumano > dadoOrc){
-				humanSkills += factory.players[0].arma.ataque;
-				orcSkills 	+= factory.players[1].arma.defesa;
-			}else{
-				orcSkills 	+= factory.players[1].arma.ataque;
-				humanSkills += factory.players[0].arma.defesa;
-			}
+		function attackOrDefense(atacante, defensor){
+			var attackSkills 	= factory.dadoGirado[atacante.raca.toLowerCase()] + atacante.agilidade;
+			var defendorSkills 	= factory.dadoGirado[defensor.raca.toLowerCase()] + defensor.agilidade;
 
-			return humanSkills > orcSkills;
+			attackSkills 	+= factory.dadoGirado[atacante.raca.toLowerCase()] > factory.dadoGirado[defensor.raca.toLowerCase()] ? atacante.arma.ataque : atacante.arma.defesa;
+			defendorSkills 	+= factory.dadoGirado[atacante.raca.toLowerCase()] > factory.dadoGirado[defensor.raca.toLowerCase()] ?defensor.arma.defesa :defensor.arma.ataque;	
+
+			return attackSkills > defendorSkills;
 		}
 
-		function calculateDamage(){
-			var dano = 0;
-			if(factory.dadoGirado.humano > factory.dadoGirado.orc){
-				dano =  parseFloat((girarDado(factory.players[0].arma.dado)/factory.players[0].arma.dado) + factory.players[0].forca).toFixed(2);
-				factory.players[1].vida = parseFloat(factory.players[1].vida - dano).toFixed(2); 
+		function calculateDamage(atacante, defensor){
+			var dano 		= 0;
+			dano 			= parseFloat(girarDado(atacante.arma.dado) + atacante.forca).toFixed(2);
+			defensor.vida 	= parseFloat(defensor.vida - dano).toFixed(2);
 
-				if(factory.players[1].vida < 0) factory.players[1].vida = 0;
-			}else{
-				dano =  parseFloat((girarDado(factory.players[1].arma.dado)/factory.players[1].arma.dado) + factory.players[1].forca).toFixed(2);
-				factory.players[0].vida = parseFloat(factory.players[0].vida - dano).toFixed(2);
-				if(factory.players[0].vida < 0) factory.players[0].vida = 0;
-			}
+			if(defensor.vida < 0) defensor.vida = 0;
 
 			return dano;				
 		}
@@ -227,6 +205,10 @@ angular.module('partida').factory('partidaFactory', [
 			return factory.playing = !factory.playing;
 		}
 
+		factory.formatDate = function(date){
+			return new Date(date).toLocaleString();
+		}
+
 		function objectToQuerystring (obj) {
 		  return Object.keys(obj).reduce(function (str, key, i) {
 		    var delimiter, val;
@@ -237,7 +219,6 @@ angular.module('partida').factory('partidaFactory', [
 		  }, '');
 		}
 
-		
 		return factory;
 	}
 ])

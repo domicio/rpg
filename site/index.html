@@ -61,10 +61,10 @@ H & O - The game <i class="fas fa-khanda"></i>
               </tr>
             </thead>
           <tbody>
-            <tr ng-repeat="match in controller.getMatches()">
-              <td>{{match.id}}</td>
-              <td>{{match.created_at | date}}</td>
-              <td>{{match.updated_at}}</td>
+            <tr ng-repeat="match in controller.getMatches()  | orderBy : 'updated_at' : true">
+              <td>{{ match.id }}</td>
+              <td>{{ controller.formatDate(match.created_at) }}</td>
+              <td>{{ controller.formatDate(match.updated_at) }}</td>
             </tr>
           </tbody>
         </table>

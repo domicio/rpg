@@ -12,6 +12,7 @@ function(factory){
 	this.getResults			= factory.getResults;	
 	this.getMatches			= factory.getMatches;
 	this.tooglePlaying		= factory.tooglePlaying;
+	this.formatDate 		= factory.formatDate;
 
 	angular.element(document).ready(function(){
 		factory.searchMatches();
