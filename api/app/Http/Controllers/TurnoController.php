@@ -25,7 +25,7 @@ class TurnoController extends Controller
      */
     public function create()
     {
-        return view('Turnos.create', compact('salas', 'professores', 'user'));
+        // return view('Turnos.create', compact('salas', 'professores', 'user'));
     }
 
     /**

@@ -8,5 +8,6 @@ use App\Armas;
 class Jogadores extends Model
 {
     protected $table 	= "jogadores";
+    protected $guarded 	= [];
     //
 }

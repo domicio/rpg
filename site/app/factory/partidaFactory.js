@@ -21,8 +21,11 @@ angular.module('partida').factory('partidaFactory', [
 			label: 'Começar uma partida',
 			id: 'startBtn',
 			click: function(){
+				factory.results.splice(0);
+				factory.dadoGirado.humano 	= 0; 
+				factory.dadoGirado.orc 		= 0;
 				storeMatch();
-				searchPlayers()
+				
 			},
 			customClass: 'btn btn-outline-success my-2 my-sm-0'
 		};
@@ -100,90 +103,88 @@ angular.module('partida').factory('partidaFactory', [
 				data	: data
 			})
 			.then(function (response) {
-				console.log('response err');
-				if(response.data.length > 0)
-					factory.idPartida = response.data[0].id;
+				if(response.data != null){
+					factory.idPartida = response.data.id;
+					searchPlayers()
+				}
 
 			}, function(response){
-				console.log('response err');
+				console.log('err', response);
 			})
 		}
 
-		function storeActionDone(data){
+		function storeActionDone(_data){
 
 			$http({
-				method: 'POST',
-				url   : factory.service_url + 'turnos',
-				data: data
+				method	: 'POST',
+				url   	: factory.service_url + 'turnos',
+				headers	: {'Content-Type': 'application/x-www-form-urlencoded'},
+				data	: objectToQuerystring(_data)
 			})
 			.then(function (response) {
-				if(response.data.length != 0)
-					factory.results = response.data;
 
-			}, function(response){})
+			}, function(response){
+				console.log('response err', response);
+			})
 		}
 
 		function rollDices(){
-			console.log('dices rolled!');
 			factory.dadoGirado.humano 	= girarDado(20);
 			factory.dadoGirado.orc 		= girarDado(20);
-			var data 					= [];
 			var atacante 				= '';
 			var defensor 				= '';
-			data['id_partida'] 			= factory.idPartida;
-
-			console.log('dadoHumano', factory.dadoGirado.humano, 'dadoOrc', factory.dadoGirado.orc);
+			var dano 					= 0;
+			var _data					= {};
+			_data.id_partida			= factory.idPartida;
 
 			if(factory.dadoGirado.humano == factory.dadoGirado.orc) rollDices();
 			
-			atacante = factory.dadoGirado.humano > factory.dadoGirado.orc ? 'Humano' : 'Orc';
-			defensor = factory.dadoGirado.humano > factory.dadoGirado.orc ? 'Orc' : 'Humano';
+			atacante = factory.dadoGirado.humano > factory.dadoGirado.orc ? factory.players[0] : factory.players[1];
+			defensor = factory.dadoGirado.humano > factory.dadoGirado.orc ? factory.players[1] : factory.players[0];
 			
 			if(attackOrDefense(factory.dadoGirado.humano, factory.dadoGirado.orc)){
-				var dano = calculateDamage();
-				data['acao'] =  atacante +" deferiu " +dano +" de dano" ;
-				storeActionDone(data);
-				factory.results.unshift(data['acao']);
+				dano 		= calculateDamage();
+				_data.acao 		= atacante.raca +" deferiu " +dano +" de dano" ;
+				_data.dado 		= atacante.raca == 'Humano' ?  factory.dadoGirado.humano : factory.dadoGirado.orc ;
+				_data.jogador 	= atacante.id
+				storeActionDone(_data);
+				factory.results.unshift(angular.copy(_data.acao));
 
-				data['acao'] = defensor+" sofreu "+dano + " de dano";
-				data['dado'] = factory.dadoGirado.humano;
-				storeActionDone(data);
-				factory.results.unshift(data['acao']);
+				_data.acao 		= defensor.raca+" sofreu "+dano + " de dano";
+				_data.dado 		= defensor.raca == 'Humano' ? factory.dadoGirado.humano : factory.dadoGirado.orc ;
+				_data.jogador 	= defensor.id
+				storeActionDone(_data);
+				factory.results.unshift(angular.copy(_data.acao));
 			}else{
-				data['acao'] = defensor+' defendeu o ataque do '+atacante;
-				data['dado'] = factory.dadoGirado.orc;
-				storeActionDone(data);
-				factory.results.unshift(data['acao']);
-				data['acao'] = atacante+" não deferiu dano do "+defensor;
-				data['dado'] = factory.dadoGirado.humano;
-				storeActionDone(data);
-				factory.results.unshift(data['acao']);
+				_data.acao = defensor.raca+' defendeu o ataque do '+atacante;
+				_data.dado = factory.dadoGirado.orc;
+				_data.jogador 	= defensor.id
+				storeActionDone(_data);
+				factory.results.unshift(angular.copy(_data.acao));
+
+				_data.acao 		= atacante.raca+" não deferiu dano do "+defensor;
+				_data.dado 		= factory.dadoGirado.humano;
+				_data.jogador 	= atacante.id
+				storeActionDone(_data);
+				factory.results.unshift(angular.copy(_data.acao));
 			}
 		}
 
 		function attackOrDefense(dadoHumano, dadoOrc){
-			console.log((dadoHumano/20), factory.players[0].agilidade);
-			console.log((dadoOrc/20), factory.players[1].agilidade);
 			var humanSkills = (dadoHumano/20) + factory.players[0].agilidade;
 			var orcSkills 	= (dadoOrc/20) + factory.players[1].agilidade;
 			if(dadoHumano > dadoOrc){
-				console.log('humanSkills', factory.players[0].arma.ataque);
 				humanSkills += factory.players[0].arma.ataque;
-				console.log('orcSkills', factory.players[0].arma.defesa);
 				orcSkills 	+= factory.players[1].arma.defesa;
 			}else{
 				orcSkills 	+= factory.players[1].arma.ataque;
 				humanSkills += factory.players[0].arma.defesa;
-				console.log('humanSkills', factory.players[0].arma.defesa);
-				console.log('orcSkills', factory.players[0].arma.ataque);
 			}
 
-			console.log('attackOrDefense', humanSkills > orcSkills);
 			return humanSkills > orcSkills;
 		}
 
 		function calculateDamage(){
-			console.log('calculateDamage');
 			var dano = 0;
 			if(factory.dadoGirado.humano > factory.dadoGirado.orc){
 				dano =  parseFloat((girarDado(factory.players[0].arma.dado)/factory.players[0].arma.dado) + factory.players[0].forca).toFixed(2);
@@ -221,6 +222,17 @@ angular.module('partida').factory('partidaFactory', [
 		factory.getMatches= function(){
 			return factory.matches;
 		}
+
+		function objectToQuerystring (obj) {
+		  return Object.keys(obj).reduce(function (str, key, i) {
+		    var delimiter, val;
+		    delimiter = (i === 0) ? '&' : '&';
+		    key = encodeURIComponent(key);
+		    val = encodeURIComponent(obj[key]);
+		    return [str, delimiter, key, '=', val].join('');
+		  }, '');
+		}
+
 		
 		return factory;
 	}
