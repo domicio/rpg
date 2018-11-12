@@ -13,34 +13,26 @@ angular.module('partida').factory('partidaFactory', [
 		factory.results 			= [];
 		factory.players 			= [];
 		factory.weapons 			= [];
+		factory.matches 			= [];
 		factory.dadoGirado 			= { humano: 0, orc : 0 };
 		factory.idPartida			= 0;
 
 		factory.btnStartMatch = {
 			label: 'Começar uma partida',
 			id: 'startBtn',
-			click: function(){searchPlayers()},
+			click: function(){
+				storeMatch();
+				searchPlayers()
+			},
 			customClass: 'btn btn-outline-success my-2 my-sm-0'
 		};
 
 		factory.dado = {
 			url: 'chars/dado.jpg',
 			click: function(){rollDices()},
-			title: 'Jogar os dados'
+			title: 'Jogar os dados',
+			customClass: 'dado'
 		};
-
-
-		// function search(name){
-		// 	$http({
-		// 		method: 'GET',
-		// 		url   : factory.service_url + 'partidas',
-		// 	})
-		// 	.then(function (response) {
-		// 		if(response.data.length > 0)
-		// 			factory.results = response.data;
-				
-		// 	}, function(response){});
-		// }
 
 		function searchPlayers(){
 
@@ -86,10 +78,26 @@ angular.module('partida').factory('partidaFactory', [
 			}, function(response){})
 		}
 
+		factory.searchMatches = function(){
+			$http({
+				method: 'GET',
+				url   : factory.service_url + 'partidas',
+			})
+			.then(function (response) {
+				if(response.data.length != 0)
+					factory.matches = response.data;
+
+			}, function(response){})
+		}
+
 		function storeMatch(){
+			var data 	= [];
+			data['id'] 	= 0;
 			$http({
 				method: 'POST',
-				url   : factory.service_url + 'partida',
+				url   	: factory.service_url + 'partidas',
+				headers	: {'Content-Type': 'application/x-www-form-urlencoded'},
+				data	: data
 			})
 			.then(function (response) {
 				console.log('response err');
@@ -105,7 +113,7 @@ angular.module('partida').factory('partidaFactory', [
 
 			$http({
 				method: 'POST',
-				url   : factory.service_url + 'turno',
+				url   : factory.service_url + 'turnos',
 				data: data
 			})
 			.then(function (response) {
@@ -115,16 +123,14 @@ angular.module('partida').factory('partidaFactory', [
 			}, function(response){})
 		}
 
-
-
-		// //#todo
 		function rollDices(){
 			console.log('dices rolled!');
 			factory.dadoGirado.humano 	= girarDado(20);
 			factory.dadoGirado.orc 		= girarDado(20);
-			var data 		= {id_partida: factory.idPartida};
-			var atacante 	= '';
-			var defensor 	= '';
+			var data 					= [];
+			var atacante 				= '';
+			var defensor 				= '';
+			data['id_partida'] 			= factory.idPartida;
 
 			console.log('dadoHumano', factory.dadoGirado.humano, 'dadoOrc', factory.dadoGirado.orc);
 
@@ -135,23 +141,23 @@ angular.module('partida').factory('partidaFactory', [
 			
 			if(attackOrDefense(factory.dadoGirado.humano, factory.dadoGirado.orc)){
 				var dano = calculateDamage();
-				data.acao =  atacante +" deferiu " +dano +" de dano" ;
+				data['acao'] =  atacante +" deferiu " +dano +" de dano" ;
 				storeActionDone(data);
-				factory.results.unshift(data.acao);
+				factory.results.unshift(data['acao']);
 
-				data.acao = defensor+" sofreu "+dano + " de dano";
-				data.dado = factory.dadoGirado.humano;
+				data['acao'] = defensor+" sofreu "+dano + " de dano";
+				data['dado'] = factory.dadoGirado.humano;
 				storeActionDone(data);
-				factory.results.unshift(data.acao);
+				factory.results.unshift(data['acao']);
 			}else{
-				data.acao = defensor+' defendeu o ataque do '+atacante;
-				data.dado = factory.dadoGirado.orc;
+				data['acao'] = defensor+' defendeu o ataque do '+atacante;
+				data['dado'] = factory.dadoGirado.orc;
 				storeActionDone(data);
-				factory.results.unshift(data.acao);
-				data.acao = atacante+" não deferiu dano do "+defensor;
-				data.dado = factory.dadoGirado.humano;
+				factory.results.unshift(data['acao']);
+				data['acao'] = atacante+" não deferiu dano do "+defensor;
+				data['dado'] = factory.dadoGirado.humano;
 				storeActionDone(data);
-				factory.results.unshift(data.acao);
+				factory.results.unshift(data['acao']);
 			}
 		}
 
@@ -211,6 +217,9 @@ angular.module('partida').factory('partidaFactory', [
 
 		factory.getDices = function(){
 			return factory.dadoGirado;
+		}
+		factory.getMatches= function(){
+			return factory.matches;
 		}
 		
 		return factory;

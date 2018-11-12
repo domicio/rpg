@@ -34,7 +34,7 @@ class JogadorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreJogadores $request)
+    public function store(Request $request)
     {
        $jogador = $request->all();
        Jogadores::create($jogador);
@@ -72,7 +72,7 @@ class JogadorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreJogadores $request, $id)
+    public function update(Request $request, $id)
     {
        $jogadorUpdate   = $request->all();
        $jogador         = Jogadores::find($id);

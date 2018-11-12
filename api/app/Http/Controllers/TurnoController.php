@@ -34,7 +34,7 @@ class TurnoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreTurnos $request)
+    public function store(Request $request)
     {
        $turno = $request->all();
        Turnos::create($turno);
@@ -72,7 +72,7 @@ class TurnoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreTurnos $request, $id)
+    public function update(Request $request, $id)
     {
        $turnoUpdate   = $request->all();
        $turno         = Turnos::find($id);

@@ -10,4 +10,9 @@ function(factory){
 	this.dado				= factory.dado;
 	this.getDices			= factory.getDices;
 	this.getResults			= factory.getResults;	
+	this.getMatches			= factory.getMatches;
+
+	angular.element(document).ready(function(){
+		factory.searchMatches();
+	})
 }]);

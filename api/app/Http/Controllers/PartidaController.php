@@ -34,10 +34,10 @@ class PartidaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePartidas $request)
+    public function store(Request $request)
     {
        $partida = $request->all();
-       Partidas::create($partida);
+       $partida = Partidas::create($partida);
        return response()->json($partida, 201);
     }
 
@@ -72,7 +72,7 @@ class PartidaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StorePartidas $request, $id)
+    public function update(Request $request, $id)
     {
        $partidaUpdate   = $request->all();
        $partida         = Partidas::find($id);

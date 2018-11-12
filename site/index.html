@@ -57,11 +57,9 @@
             </thead>
           <tbody>
             <tr ng-repeat="match in controller.getMatches()">
-              <td >{{match.id}}</td>
-              <td>{{match.created_at}}</td>
+              <td>{{match.id}}</td>
+              <td>{{match.created_at | date}}</td>
               <td>{{match.updated_at}}</td>
-              <td><i title="Erase this planet" class="fas fa-times red-text" data-toggle="modal" data-target="#confirm-submit" ng-click="controller.confirm(result._id)"></i>
-              </td>
             </tr>
           </tbody>
         </table>
@@ -75,7 +73,6 @@
           <p><strong>Arma</strong>: {{controller.getPlayers()[0].arma.nome}}</p>
         </div>
         <div class="col-md-3">
-          {{controller.getPlayers()[0].vida}}
           <img class="{{controller.getPlayers()[0].vida == 0 ? 'dead' : '' }}" src="{{controller.getPlayers()[0].url}}">
         </div>
         <div class="col-md-4">
@@ -84,7 +81,7 @@
               <h2>{{controller.getDices().humano}}</h2>
             </div>
             <div class="col-md-10">
-              <img class="img-responsive " src="{{controller.dado.url}}" title="{{controller.dado.title}}" ng-click="controller.dado.click()">
+              <img ng-class="controller.dado.customClass" src="{{controller.dado.url}}" title="{{controller.dado.title}}" ng-click="controller.dado.click()">
             </div>
             <div class="col-md-1">
               <h2>{{controller.getDices().orc}}</h2>
