@@ -31,7 +31,7 @@ angular.module('partida').factory('partidaFactory', [
 		};
 
 		factory.dado = {
-			url: 'chars/dado.jpg',
+			url: 'chars/dado.png',
 			click: function(){rollDices()},
 			title: 'Jogar os dados',
 			customClass: 'dado'
@@ -221,6 +221,10 @@ angular.module('partida').factory('partidaFactory', [
 		}
 		factory.getMatches= function(){
 			return factory.matches;
+		}
+
+		factory.tooglePlaying = function(){
+			return factory.playing = !factory.playing;
 		}
 
 		function objectToQuerystring (obj) {

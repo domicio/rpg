@@ -8,7 +8,7 @@
     <meta name="author" content="">
     <link rel="icon" href="favicon.ico">
 
-    <title>Humans & Orcs</title>
+    <title>Humans & Orcs - The game</title>
 
     <!-- Bootstrap core CSS -->
     <link href="dist/css/bootstrap.min.css" rel="stylesheet">
@@ -21,7 +21,7 @@
 
   </head>
 
-  <body ng-app="partida">
+  <body ng-app="partida" ng-controller="partidaController as controller" class="{{controller.isPlaying() ? 'battle' : '' }}">
 
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,15 +31,20 @@
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
       <ul class="navbar-nav mr-4">
           <li class="nav-item active">
-            <a class="nav-link" href="">Home <span class="sr-only">(current)</span></a>
+            <a class="nav-link" ng-click="controller.tooglePlaying()">Home <span class="sr-only">(current)</span></a>
           </li>
       </ul>
+      <div class="col-md-12 text-center text-white">
+        <h4><i class="fa fa-male" aria-hidden="true"></i> <i class="fab fa-optin-monster"></i>
+H & O - The game <i class="fas fa-khanda"></i>
+</h4>
+      </div>
       </div>
     </nav>
 
-    <div role="main" class="container" ng-controller="partidaController as controller">
+    <div role="main" class="container">
 		<div class="starter-template">
-			<h1>Partidas 
+			<h1 class="{{controller.isPlaying() ? 'text-white' : ''}}">Partidas 
         <button ng-class="controller.btnStartMatch.customClass" ng-click="controller.btnStartMatch.click()">
           {{controller.btnStartMatch.label}}   
         </button>
@@ -64,8 +69,8 @@
           </tbody>
         </table>
       </div>
-      <div class="row mt-5" ng-hide="!controller.isPlaying()">
-        <div class="col-md-1">
+      <div class="row mt-5 text-white" ng-hide="!controller.isPlaying()">
+        <div class="col-md-1 ">
           <p><strong>Raça</strong>: {{controller.getPlayers()[0].raca}}</p>
           <p><strong>Força</strong>: {{controller.getPlayers()[0].forca}}</p>
           <p><strong>Agilidade</strong>: {{controller.getPlayers()[0].agilidade}}</p>
@@ -97,7 +102,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="result in controller.getResults()">
+                <tr ng-repeat="result in controller.getResults() track by $index">
                   <td>
                     {{result}}
                   </td>

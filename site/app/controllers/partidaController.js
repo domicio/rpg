@@ -11,6 +11,7 @@ function(factory){
 	this.getDices			= factory.getDices;
 	this.getResults			= factory.getResults;	
 	this.getMatches			= factory.getMatches;
+	this.tooglePlaying		= factory.tooglePlaying;
 
 	angular.element(document).ready(function(){
 		factory.searchMatches();

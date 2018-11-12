@@ -21,6 +21,11 @@ img.dado:hover{
     -moz-animation:spin 1s;
     animation:spin 1s;
 }
+.battle{
+background-image: url('../../chars/com_deep_ocean.png');
+background-repeat: no-repeat;
+background-size: 100%;
+}
 
 @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
 @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
